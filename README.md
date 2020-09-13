@@ -36,3 +36,8 @@ zappa invoke production 'my_app.my_function'
 ```
 zappa invoke production "print(1 + 2 + 3)" --raw
 ```
+
+### Install requirements
+```
+pip install -r requirements.txt
+```
