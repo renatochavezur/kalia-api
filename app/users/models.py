@@ -11,12 +11,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     username = models.CharField(max_length=128, unique=True)
-    first_name = models.CharField(max_length=64, null=True, blank=True)
-    last_name = models.CharField(max_length=64, null=True, blank=True)
+    fullname = models.CharField(max_length=128, null=True, blank=True)
+    phone = models.CharField(max_length=15, null=True, blank=True)
+    email = models.CharField(max_length=128, null=True)
     is_admin = models.BooleanField(default=False)
 
     def __str__(self):
-        return '{} {}'.format(self.id, self.username)
+        return self.username
 
     @property
     def is_staff(self):

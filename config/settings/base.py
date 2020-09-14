@@ -132,10 +132,10 @@ AUTH_USER_MODEL = "users.User"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-S3_BUCKET = "kalia-storage"
+S3_BUCKET = os.environ.get('S3_BUCKET', 'kalia-storage')
 
-STATICFILES_STORAGE = "django_s3_storage.storage.StaticS3Storage"
+STATICFILES_STORAGE = 'django_s3_storage.storage.StaticS3Storage'
 
 AWS_S3_BUCKET_NAME_STATIC = S3_BUCKET
 
-STATIC_URL = "https://{}.s3.amazonaws.com/".format(S3_BUCKET)
+STATIC_URL = 'https://{}.s3.amazonaws.com/'.format(S3_BUCKET)

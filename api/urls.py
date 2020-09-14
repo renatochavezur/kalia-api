@@ -15,6 +15,9 @@ auth_urls = [
     path('request_token/',
          auth_views.CustomkAuthToken.as_view(),
          name='request_token'),
+    path('register/',
+         auth_views.CustomkAuthToken.as_view(),
+         name='register_request'),
 ]
 
 urlpatterns = [

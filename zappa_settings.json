@@ -12,7 +12,7 @@
         "role_name": "ZappaDjangoRole",
         "role_arn": "arn:aws:iam::802720392097:role/ZappaDjangoRole",
         "environment_variables": {
-            "AWS_STORAGE_BUCKET_NAME": "kalia-dev-storage",
+            "S3_BUCKET": "kalia-storage",
             "DB_NAME": "db_kalia_dev",
             "DB_USER": "admin",
             "DB_PASSWORD": "admin112358",
