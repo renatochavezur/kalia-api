@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_s3_storage',
+    'corsheaders',
     'rest_framework',
     'app.users',
     'api',
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -72,6 +74,8 @@ TEMPLATES = [
         },
     },
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -132,10 +136,10 @@ AUTH_USER_MODEL = "users.User"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-S3_BUCKET = os.environ.get('S3_BUCKET', 'kalia-storage')
+S3_BUCKET_STATIC_STORAGE = os.environ.get('S3_BUCKET_STATIC_STORAGE', 'kalia-storage')
 
 STATICFILES_STORAGE = 'django_s3_storage.storage.StaticS3Storage'
 
-AWS_S3_BUCKET_NAME_STATIC = S3_BUCKET
+AWS_S3_BUCKET_NAME_STATIC = S3_BUCKET_STATIC_STORAGE
 
-STATIC_URL = 'https://{}.s3.amazonaws.com/'.format(S3_BUCKET)
+STATIC_URL = 'https://{}.s3.amazonaws.com/'.format(S3_BUCKET_STATIC_STORAGE)

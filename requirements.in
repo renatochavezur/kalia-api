@@ -1,5 +1,7 @@
 djangorestframework
 Django<3.0
+django-cors-headers
+django-debug-toolbar
 django-jet2
 django-s3-storage
 django-storages
@@ -7,4 +9,3 @@ mysql-connector-python
 pip-tools
 pre-commit
 python-dotenv
-django-debug-toolbar
