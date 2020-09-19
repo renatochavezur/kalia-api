@@ -11,4 +11,4 @@ class UserBasicSerializer(serializers.ModelSerializer):
         fields = ['id', 'fullname', 'username', 'phone', 'email', 'birth_day', 'dni', 'occupation',
                   'show_birth_day', 'show_dni', 'show_email', 'show_occupation', 'show_phone',
                   'identification_code']
-        read_only_fields = ['id', 'username']
+        read_only_fields = ['id', 'username', 'identification_code']
