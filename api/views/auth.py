@@ -6,10 +6,10 @@ from rest_framework import status
 
 from api.serializers.auth import RegisterSerializer
 from api.serializers.users import UserBasicSerializer
-from api.mixins import APIView
+from rest_framework.views import APIView as RestApiView
 
 
-class AuthAPIView(APIView):
+class AuthAPIView(RestApiView):
     def login(self, user):
         try:
             token = Token.objects.get(user=user)

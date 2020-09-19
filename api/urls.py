@@ -2,14 +2,7 @@
 from django.urls import include, path
 
 from api.views import auth as auth_views
-
-
-router_config = {
-    'get': 'retrieve',
-    'post': 'create',
-    'put': 'update',
-    'delete': 'destroy'
-}
+from api.views import users as user_views
 
 auth_urls = [
     path('request_token/',
@@ -20,6 +13,13 @@ auth_urls = [
          name='register_request'),
 ]
 
+user_urls = [
+    path('',
+         user_views.UserDataView.as_view(),
+         name='update_user_data'),
+]
+
 urlpatterns = [
     path('auth/', include(auth_urls)),
+    path('users/', include(user_urls)),
 ]

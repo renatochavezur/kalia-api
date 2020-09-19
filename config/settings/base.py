@@ -41,9 +41,9 @@ INSTALLED_APPS = [
     'django_s3_storage',
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
     'app.users',
     'api',
-    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [

@@ -12,12 +12,3 @@ class APIView(rest_APIView):
     def get_user(self):
         return self.request.user
 
-    def get_student(self):
-        if hasattr(self.request.user, 'student'):
-            return self.request.user.student
-        return None
-
-    def get_teacher(self):
-        if hasattr(self.request.user, 'teacher'):
-            return self.request.user.teacher
-        return None
