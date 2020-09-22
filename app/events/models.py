@@ -1,7 +1,9 @@
+
+from secrets import choice
+
 from django.db import models
 
 from app.users.models import User
-from app.utils.events import generate_event_code
 
 
 class Event(models.Model):
@@ -29,14 +31,21 @@ class Event(models.Model):
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True)
     event_code = models.CharField(max_length=CODE_SIZE,
-                                  unique=True,
-                                  default=generate_event_code)
+                                  unique=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False, blank=True)
     modified = models.DateTimeField(auto_now=True, editable=False, blank=True)
 
     def __str__(self):
         return '{}'.format(self.name)
+
+    @classmethod
+    def generate_event_code(cls):
+        alphabet = 'abcdefghijklmnopqrstuvwxyz'
+        event_code = ''.join(choice(alphabet) for _ in range(cls.CODE_SIZE))
+        while Event.objects.filter(event_code=event_code).exists():
+            event_code = ''.join(choice(alphabet) for _ in range(cls.CODE_SIZE))
+        return event_code
 
     class Meta:
         ordering = ['start_time']

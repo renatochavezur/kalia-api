@@ -1,10 +1,11 @@
 
+from secrets import choice
+
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
 from app.users.managers import UserManager
-from app.utils.users import generate_identification_code
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -28,8 +29,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     show_dni = models.BooleanField(default=True)
     show_birth_day = models.BooleanField(default=True)
     identification_code = models.CharField(max_length=IDENTIFICATION_CODE_SIZE,
-                                           unique=True,
-                                           default=generate_identification_code)
+                                           unique=True)
 
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True, editable=False)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True, editable=False)
@@ -40,6 +40,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_staff(self):
         return self.is_admin
+
+    @classmethod
+    def generate_identification_code(cls):
+        alphabet = 'abcdefghijklmnopqrstuvwxyz'
+        identification_code = ''.join(choice(alphabet) for _ in range(cls.IDENTIFICATION_CODE_SIZE))
+        while User.objects.filter(identification_code=identification_code).exists():
+            identification_code = ''.join(choice(alphabet) for _ in range(cls.IDENTIFICATION_CODE_SIZE))
+        return identification_code
 
 
 class Contact(models.Model):

@@ -33,7 +33,7 @@ class CustomkAuthToken(ObtainAuthToken, AuthAPIView):
         return self.login(user)
 
 
-class Register(AuthAPIView):
+class RegisterView(AuthAPIView):
     serializer_class = RegisterSerializer
 
     def post(self, request, *args, **kwargs):

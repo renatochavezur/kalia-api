@@ -9,7 +9,7 @@ auth_urls = [
          auth_views.CustomkAuthToken.as_view(),
          name='request_token'),
     path('register/',
-         auth_views.CustomkAuthToken.as_view(),
+         auth_views.RegisterView.as_view(),
          name='register_request'),
 ]
 
