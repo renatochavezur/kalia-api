@@ -1,15 +1,18 @@
 
+from django.db import transaction
 from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework import status
 
 from api.serializers.auth import RegisterSerializer
 from api.serializers.users import UserBasicSerializer
-from rest_framework.views import APIView as RestApiView
+from app.users.models import User
+from rest_framework import viewsets
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.decorators import action
 
 
-class AuthAPIView(RestApiView):
+class AuthAPIViewSet(viewsets.GenericViewSet):
     def login(self, user):
         try:
             token = Token.objects.get(user=user)
@@ -23,22 +26,24 @@ class AuthAPIView(RestApiView):
         }
         return Response(response, status=response_status)
 
-
-class CustomkAuthToken(ObtainAuthToken, AuthAPIView):
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
+    @action(methods=['post'], detail=False)
+    def request_token(self, request, *args, **kwargs):
+        serializer = AuthTokenSerializer(data=request.data,
+                                         context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         return self.login(user)
 
-
-class RegisterView(AuthAPIView):
-    serializer_class = RegisterSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
+    @action(methods=['post'], detail=False)
+    def register(self, request, *args, **kwargs):
+        serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
+            validated_data = serializer.validated_data
+            user = User(**validated_data)
+            user.email = user.username
+            user.identification_code = User.generate_identification_code()
+            user.set_password(validated_data['password'])
+            with transaction.atomic():
+                user.save()
             return self.login(user)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

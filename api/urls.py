@@ -1,33 +1,16 @@
 
 from django.urls import include, path
+from rest_framework import routers
 
-from api.views import auth as auth_views
-from api.views import users as user_views
-from api.views import events as event_views
+from api.views.events import EventViewSet
+from api.views.auth import AuthAPIViewSet
+from api.views.users import UserViewSet
 
-auth_urls = [
-    path('request_token/',
-         auth_views.CustomkAuthToken.as_view(),
-         name='request_token'),
-    path('register/',
-         auth_views.RegisterView.as_view(),
-         name='register_request'),
-]
-
-event_urls = [
-    path('<int:id>/',
-         event_views.EventView.as_view(),
-         name='event_description'),
-]
-
-user_urls = [
-    path('',
-         user_views.UserDataView.as_view(),
-         name='update_user_data'),
-]
+router = routers.DefaultRouter()
+router.register('auth', AuthAPIViewSet, basename='auth_token')
+router.register('events', EventViewSet)
+router.register('users', UserViewSet)
 
 urlpatterns = [
-    path('auth/', include(auth_urls)),
-    path('users/', include(user_urls)),
-    path('events/', include(event_urls)),
+    path('', include(router.urls)),
 ]
