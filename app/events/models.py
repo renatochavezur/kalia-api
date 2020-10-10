@@ -46,7 +46,7 @@ class Event(models.Model):
         return event_code
 
     class Meta:
-        ordering = ['start_time']
+        ordering = ['-start_time']
 
 
 class Enrollment(models.Model):
