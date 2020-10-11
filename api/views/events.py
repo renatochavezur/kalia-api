@@ -1,4 +1,5 @@
 
+from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 
@@ -37,6 +38,7 @@ class EventViewSet(APIView, viewsets.ModelViewSet):
         term = request.query_params.get('term', None)
         owned = request.query_params.get('owned', None)
         enrolled = request.query_params.get('enrolled', None)
+        event_status = request.query_params.get('status', None)
         queryset = self.get_queryset()
         user = self.get_user()
         if event_code:
@@ -48,6 +50,15 @@ class EventViewSet(APIView, viewsets.ModelViewSet):
         elif enrolled:
             events_id = user.enrollments.values_list('event_id', flat=True)
             queryset = queryset.filter(pk__in=events_id)
+        if event_status:
+            now = timezone.now()
+            if event_status == 'OPEN':
+                queryset = queryset.filter(start_time__gt=now)
+            elif event_status == 'CLOSED':
+                queryset = queryset.filter(end_time__lt=now)
+            elif event_status == 'PROGRESS':
+                queryset = queryset.filter(end_time__gt=now,
+                                           start_time__lt=now)
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)

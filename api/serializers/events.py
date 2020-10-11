@@ -16,7 +16,7 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ['id', 'name', 'summary', 'description', 'mode', 'place', 'maps_url',
-                  'meeting_url', 'start_time', 'end_time', 'event_code']
+                  'meeting_url', 'start_time', 'end_time', 'event_code', 'owner']
 
 
 class EventListSerializer(serializers.ModelSerializer):
@@ -25,11 +25,11 @@ class EventListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ['id', 'name', 'summary', 'start_time', 'end_time', 'mode', 'status', 'owner']
+        fields = ['id', 'name', 'summary', 'start_time', 'end_time', 'mode', 'status']
 
     def get_status(self, event):
         if event.end_time < timezone.now():
-            return 'OPEN'
-        elif event.start_time > timezone.now():
             return 'CLOSED'
+        elif event.start_time > timezone.now():
+            return 'OPEN'
         return 'PROGRESS'
